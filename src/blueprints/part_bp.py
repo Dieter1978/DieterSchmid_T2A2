@@ -8,14 +8,16 @@ from blueprints.auth_bp import admin_required, admin_or_owner_required
 parts_bp = Blueprint('parts', __name__, url_prefix='/parts')
 
 @parts_bp.route("/")
-def all_pcs():
-    ''' List all PCs in the database
+def all_parts():
+    ''' List all Parts in the database
 
         Returns :
         Serialized JSON representation of Pc data.
     
     '''
+    # create an SQL statement to get all parts from the database
     stmt = db.select(Part)
+    # execute the statement which return all parts from the database
     parts = db.session.scalars(stmt).all()
     return PartSchema(many=True).dump(parts)
 
@@ -30,8 +32,9 @@ def one_part(part_id):
         Serialized JSON representation of Part data.
     
     '''
-
+    # create an SQL statement a part from the database based on the route id
     stmt = db.select(Part).filter_by(id=part_id)
+    #execute the statement which returns the part fromt the database
     part = db.session.scalar(stmt)
     if part is not None:
         return PartSchema().dump(part)
@@ -48,13 +51,16 @@ def create_part():
     
     '''
     part_info = PartSchema().load(request.json)
+    #create a new instance of Part model
     part = Part(
         name=part_info['name'],
         description=part_info['description'],
         value=part_info['value']
         
     )
+    #add the intance to the database session
     db.session.add(part)
+    #write the Part data to the database
     db.session.commit()
     return PartSchema().dump(part), 201
 
@@ -68,12 +74,14 @@ def update_part(part_id):
         Serialized JSON representation of Part data.
     
     '''
+    #create a statement to select a part based on the id from the route
     stmt = db.select(Part).filter_by(id=part_id)
+    #execute the statement store the return the part
     part = db.session.scalar(stmt)
     if part is not None:
         #admin_or_owner_required(pc.user.id)
         part_info = PartSchema().load(request.json)
-
+        #update the part value from the JSON data passed in
         part.name = part_info.get('name', part.name),
         part.description = part_info.get('description', part.description),
         part.value = part_info.get('value', part.value),
@@ -87,6 +95,7 @@ def update_part(part_id):
 
 # Delete a card
 @parts_bp.route('/<int:part_id>', methods=['DELETE'])
+@jwt_required()
 def delete_part(part_id):
     ''' Delete a Part from the database based on the id passed in.
     
@@ -97,11 +106,15 @@ def delete_part(part_id):
         Empty JSON object
 
     '''
+     #create a statement to select a part based on the id from the route
     stmt = db.select(Part).filter_by(id=part_id)
+    #execute the statement store the return the part
     part = db.session.scalar(stmt)
     if part:
-        #admin_or_owner_required(part.user.id)
+        admin_or_owner_required(part.user.id)
+        #add the part for deletion
         db.session.delete(part)
+        #delete the part from the database
         db.session.commit()
         return {}, 200
     else:

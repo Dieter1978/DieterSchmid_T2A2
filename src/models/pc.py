@@ -1,6 +1,6 @@
 from init import db, ma
 from marshmallow import fields
-
+from marshmallow.validate import Length, OneOf, And, Regexp
 
 class Pc(db.Model):
     __tablename__="pcs"
@@ -18,6 +18,16 @@ class Pc(db.Model):
 class PcSchema(ma.Schema):
     user = fields.Nested('UserSchema', exclude=[
                          'password', 'pcs'])
+    
+    name = fields.String(required=True, validate=And(
+        Length(min=5, error='Title must be at least 3 characters long'),
+        error='Must be 5 characters long'))
+    
+    description = fields.String(load_default='')
+
+    value = fields.Float(load_default=0)
+
+
     class Meta:
         fields = ('id', 'name', 'description', 'value','user')
         ordered = True
