@@ -43,6 +43,7 @@ def one_part(part_id):
         return {"Error": "No part with this id was found"}, 404
 
 @parts_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_part():
     ''' Creates new Part in database by loading JSON data passed via web POST request
     
@@ -67,6 +68,7 @@ def create_part():
 
 # Update a PC
 @parts_bp.route('/<int:part_id>', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_part(part_id):
     ''' Update the fields of a Part already in the database, from JSON passed via a web PUT or PATCH request
     
@@ -79,7 +81,7 @@ def update_part(part_id):
     #execute the statement store the return the part
     part = db.session.scalar(stmt)
     if part is not None:
-        #admin_or_owner_required(pc.user.id)
+        #admin_required()
         part_info = PartSchema().load(request.json)
         #update the part value from the JSON data passed in
         part.name = part_info.get('name', part.name),
@@ -111,7 +113,7 @@ def delete_part(part_id):
     #execute the statement store the return the part
     part = db.session.scalar(stmt)
     if part:
-        admin_or_owner_required(part.user.id)
+        admin_required()
         #add the part for deletion
         db.session.delete(part)
         #delete the part from the database

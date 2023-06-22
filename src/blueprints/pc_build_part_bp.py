@@ -12,6 +12,7 @@ pc_build_part_bp = Blueprint('comments', __name__)
 
 
 @pc_build_part_bp.route('/pcs/<int:id>/pcbuild')
+@jwt_required()
 def show_build(id):
     #Create a statement to get all the pc build parts based on the id from the route
     stmt = db.select(Pc_Build_Part).where(Pc_Build_Part.pc_id == id)
@@ -76,7 +77,7 @@ def update_pcbuild(pc_id, pcbuild_id):
         return PcSchema().dump(pc), 202
     else:
         # no card comes back with 404 Not Found
-        return {"Error": "No Pc with this id was found"}, 404
+        return {"Error": "No Pc build with this id was found"}, 404
 
 
 # Delete a Pc Build Part instance
