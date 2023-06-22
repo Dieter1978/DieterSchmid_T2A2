@@ -33,7 +33,7 @@ def admin_or_owner_required(owner_id):
         abort(401, description="Unauthorized, Admin or owner access required")
 
 
-@auth_bp.route('/users')
+@auth_bp.route('/auth/users')
 def all_users():
     #create query to get all users in the system
     stmt = db.select(User)
@@ -42,8 +42,29 @@ def all_users():
     #display in JSON
     return UserSchema(many=True, exclude=['password']).dump(users)
 
+@auth_bp.route('/auth/users/<int:user_id>')
+def one_user(user_id):
+    ''' List a User in the database
 
-@auth_bp.route('/register', methods=['POST'])
+        Parameters:
+        argument1 (int) : user_id
+
+        Returns :
+        Serialized JSON representation of user data.
+    
+    '''
+    # setup a statement to select a user by the id passed from the route
+    stmt = db.select(User).filter_by(id=user_id)
+    # execute the statement and store the returned user data
+    user = db.session.scalar(stmt)
+    if user is not None:
+        return UserSchema().dump(user)
+    else:
+        # no pc comes back with 404 Not Found
+        return {"Error": "No user with this id was found"}, 404
+
+
+@auth_bp.route('/auth/register', methods=['POST'])
 def register():
     try:
         user_info = UserSchema().load(request.json)
@@ -64,7 +85,7 @@ def register():
         return {'error': 'Email address already in use'}, 409
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/auth/login', methods=['POST'])
 def login():
     try:
         #create query to select user based on email address
