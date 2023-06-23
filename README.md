@@ -1,9 +1,10 @@
 # PROJECT DOCUMENTATION
 
-**R1 Identification of the problem you are trying to solve by building this particular app.**
+## R1 Identification of the problem you are trying to solve by building this particular app.
+
 The modern PC is made up of many customisable parts. Building a PC requires planning. Often a person will need to compile a list of parts on a spreadsheet or paper then used that to research configuration compatibilities and find quotes. By creating an API application we can make this process easier by storing PC configurations and the list of part.
 
-**R2 Why is it a problem that needs solving?**
+## R2 Why is it a problem that needs solving?\*\*
 
 Their are number of reasons for doing this. But ultimately we trying to ease the burden on the consumer when shopping for PC parts. although the initial app MVP is just to store configurations as a catalogue of the users PC builds, it could certainly be built to allow :
 
@@ -12,7 +13,8 @@ Their are number of reasons for doing this. But ultimately we trying to ease the
 
 These two are items whilst not include in todays app are surely for food for thought in creating a seed for a PC building online business model driven by having PC config first rather then scouring the web for the parts one needs.
 
-**R3 Why have you chosen this database system. What are the drawbacks compared to others?**
+## R3 Why have you chosen this database system. What are the drawbacks compared to others?\*\*
+
 PostSQL was chooses for three reasons.
 
 1. Constraints on the options available to choose from.
@@ -28,7 +30,8 @@ Their a range of other benefits such as its wide OS compatibility support for al
 4. Finally companies need to work if they have the in-house expertise or if they need it. If not then they are reliant on third party partners or consultants to support the in-house skills. Sometimes a companies
    will hire new expertise in just for helping support PostgreSQL.
 
-**R4 Identify and discuss the key functionalities and benefits of an ORM.**
+## R4 Identify and discuss the key functionalities and benefits of an ORM.\*\*
+
 Object Relational Mapping controls the interact between an application and the database it connects to. By using ORM we do not need to use direct SQL statement to work with data in the database. Instead we can use the programming language the application is being developed in. We can use things like Object Oriented Classes and models as integrated data structures instead of SQL tables. The major benefits of this are :
 
 - Elimantes the need for repetive SQL code. Cleaner and less code. This ultimately speeds up development time.
@@ -37,16 +40,200 @@ Object Relational Mapping controls the interact between an application and the d
 - ORMs also provide some shielding agaisnt things like SQL injections making the code base more secure.
 - Because the ORM abstracts the database it is easy to change database systems should one desire.
 
-**R5 Document all endpoints for your API.**
+## R5 Document all endpoints for your API.\*\*
 
-**R6 An ERD for your app.**
+## R6 An ERD for your app.\*\*
 
 ![ERD Diagram for APP](./PCBuild_ERD.png)
 
-**R7 Detail any third party services that your app will use.**
+## R7 Detail any third party services that your app will use.\*\*
 
-**R8 Describe your projects models in terms of the relationships they have with each other.**
+## R8 Describe your projects models in terms of the relationships they have with each other.
 
-**R9 Discuss the database relations to be implemented in your application.**
+The PC Configuration API uses as discussed previously an ORM. The structure of the program seperates all database management through the use of models. It is the ORM SQLalchemy that allows interaction with the database to be done in Python and not SQL. Further the integration tool Marshmallow is used with Sqlalchemy to convert data into a format either usable for the database or for the API (JSON). Lets look specifically at the models in the PC Configuration API
 
-**R10 Describe the way tasks are allocated and tracked in your project.**
+### The User Model.
+
+```python
+from init import db, ma
+from marshmallow import fields
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    email = db.Column(db.String, nullable=False, unique=True)
+    password = db.Column(db.String, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
+    pcs = db.relationship(
+        'Pc', back_populates='user', cascade='all,delete')
+
+class UserSchema(ma.Schema):
+    pcs = fields.List(fields.Nested('PcSchema', exclude=['user', 'id']))
+
+    class Meta:
+        fields = ('name', 'email', 'password', 'is_admin','pcs')
+```
+
+- The main relationship the User model shows is that of one to many PCs. A user can have many PCs.
+
+```python
+pcs = db.relationship(
+        'Pc', back_populates='user', cascade='all,delete')
+```
+
+### The PC model.
+
+```python
+from init import db, ma
+from marshmallow import fields
+from marshmallow.validate import Length, OneOf, And, Regexp
+
+class Pc(db.Model):
+    __tablename__="pcs"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    description = db.Column(db.Text())
+    value = db.Column(db.Float)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', back_populates='pcs')
+
+    pc_build_parts = db.relationship(
+        'Pc_Build_Part', back_populates='pc', cascade='all,delete')
+
+class PcSchema(ma.Schema):
+    user = fields.Nested('UserSchema', exclude=[
+                         'password', 'pcs'])
+
+    name = fields.String(required=True, validate=And(
+        Length(min=5, error='Title must be at least 3 characters long'),
+        error='Must be 5 characters long'))
+
+    description = fields.String(load_default='')
+
+    value = fields.Float(load_default=0)
+
+
+    class Meta:
+        fields = ('id', 'name', 'description', 'value','user')
+        ordered = True
+```
+
+- The relationship here show that a User must own a PC.
+
+```python
+user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.id', ondelete='CASCADE'), nullable=False)
+user = db.relationship('User', back_populates='pcs')
+```
+
+- Also there is a relationship where a PC is made of PC Build Parts.
+
+```python
+pc_build_parts = db.relationship(
+        'Pc_Build_Part', back_populates='pc', cascade='all,delete')
+```
+
+### The Part Model
+
+```python
+from init import db, ma
+from marshmallow.validate import Length, OneOf, And, Regexp
+from marshmallow import fields
+
+class Part(db.Model):
+    __tablename__="parts"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    description = db.Column(db.Text())
+    value = db.Column(db.Float)
+
+    pc_build_parts = db.relationship(
+        'Pc_Build_Part', back_populates='part', cascade='all,delete')
+
+class PartSchema(ma.Schema):
+    name = fields.String(required=True, validate=And(
+        Length(min=5, error='Title must be at least 3 characters long'),
+        error='Must be 5 characters long'))
+
+    description = fields.String(load_default='')
+
+    value = fields.Float(load_default=0)
+
+    class Meta:
+        fields = ('id', 'name', 'description', 'value')
+```
+
+- The relationship here is that Part can be part of a PC BUild.
+
+```python
+ pc_build_parts = db.relationship(
+        'Pc_Build_Part', back_populates='part', cascade='all,delete')
+```
+
+### The PC BUild Part model
+
+```python
+from init import db, ma
+from marshmallow import fields
+from marshmallow.validate import Length, OneOf, And, Regexp
+
+class Pc_Build_Part(db.Model):
+    __tablename__ = 'pc_build_parts'
+    id = db.Column(db.Integer, primary_key=True)
+    number = db.Column(db.Integer)
+    value = db.Column(db.Float)
+
+    pc_id = db.Column(db.Integer, db.ForeignKey(
+        'pcs.id', ondelete='CASCADE'), nullable=False)
+
+    part_id = db.Column(db.Integer, db.ForeignKey(
+        'parts.id', ondelete='CASCADE'), nullable=False)
+
+    pc = db.relationship('Pc', back_populates='pc_build_parts')
+    part = db.relationship('Part', back_populates='pc_build_parts')
+
+class Pc_Build_PartSchema(ma.Schema):
+    pc = fields.Nested('PcSchema', only=['name'])
+    part = fields.Nested('PartSchema',only=['name','description'])
+
+    number = fields.Integer(load_default=1)
+
+    value = fields.Float(load_default=0)
+
+    part_id = fields.Integer(required=True)
+
+    class Meta:
+        fields = ('number','value','part_id','part','pc')
+        ordered = True
+```
+
+- A PC Build Part must belong to a PC.
+
+```python
+pc_id = db.Column(db.Integer, db.ForeignKey(
+        'pcs.id', ondelete='CASCADE'), nullable=False)
+
+pc = db.relationship('Pc', back_populates='pc_build_parts')
+
+```
+
+- A PC Build Part must have a Part associated to it.
+
+```python
+part_id = db.Column(db.Integer, db.ForeignKey(
+        'parts.id', ondelete='CASCADE'), nullable=False)
+
+part = db.relationship('Part', back_populates='pc_build_parts')
+```
+
+## R9 Discuss the database relations to be implemented in your application.
+
+## R10 Describe the way tasks are allocated and tracked in your project.\*\*
+
+```
+
+```
