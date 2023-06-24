@@ -232,6 +232,32 @@ part = db.relationship('Part', back_populates='pc_build_parts')
 
 ## R9 Discuss the database relations to be implemented in your application.
 
+The PC Configuration API is made up of four tables. R6 has a diagram of Enitity relations showing how each of these tables relates to one another. In the previous question the code is shown as to how the relationships between entities is built in the program. Lets examine the relations or tables used.
+
+- Table Users :
+
+Users (id Integer not null primary key, name varchar(100), email not null unique varchar(150), isAdmin boolean )
+
+The Users table is constructed with one primary key it must be unique and it cannot be empty. Uers have a name and email they use to login with the email field cannot be empty and you cannot have two of the same emails in the database. The isAdmin field can be flagged to true or false depending on if the user is setup as an admin for the site. Admins are able to create and delete entities in the database.
+
+- Table PCs :
+
+Pcs (id Integer not null unique primary key, name varchar(100), description text, value float, user_id Integer not null unique foreign key)
+
+The pcs table has a unique primary key but it also has one foriegn key linking it to the user that created the PC.From the ERD diagram we can see that PCs have one User but a User can create many PCs. The other fields name and desccription are self explanitory. The value field represents the total value of the PC and its parts.
+
+- Table Parts :
+
+Parts (id Integer not null unique primary key, name varchar(100), description text, value float)
+
+The Parts table uses a unique primary key identifying each part. The Parts are essentially what are used to be put in a PC Build. They have name a description and each part can have a value represent by a decimal number.
+
+- Table PC_Build_Parts :
+
+PC_Build_Parts (id Integer not null unique primary key, pc_id Integer not null unique foreign key, part_id integer not null unique foreign key, number Integer, value float)
+
+The PC_Build_Parts table has a relationship with Parts and PC and includes foreign keys linking to those tables. If we look on the ERD diagram we can see that a PC can have multiple PC Build Parts and a Part can be in multiple PC Builds Parts. A PC Build Part can be in only one PC and comprise of only one type of part. The PC Build Part may include more then one of the self type of parts represented by the number column. The value of the PC Build Part is also included as a decimal number.
+
 ## R10 Describe the way tasks are allocated and tracked in your project.\*\*
 
 ```
