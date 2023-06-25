@@ -44,7 +44,7 @@ Object Relational Mapping controls the interact between an application and the d
 
 ## R6 An ERD for your app.\*\*
 
-![ERD Diagram for APP](./PCBuild_ERD.png)
+![ERD Diagram for APP](/Resources/PCBuild_ERD.png)
 
 ## R7 Detail any third party services that your app will use.\*\*
 
@@ -258,8 +258,10 @@ PC_Build_Parts (id Integer not null unique primary key, pc_id Integer not null u
 
 The PC_Build_Parts table has a relationship with Parts and PC and includes foreign keys linking to those tables. If we look on the ERD diagram we can see that a PC can have multiple PC Build Parts and a Part can be in multiple PC Builds Parts. A PC Build Part can be in only one PC and comprise of only one type of part. The PC Build Part may include more then one of the self type of parts represented by the number column. The value of the PC Build Part is also included as a decimal number.
 
-## R10 Describe the way tasks are allocated and tracked in your project.\*\*
+## R10 Describe the way tasks are allocated and tracked in your project.
 
-```
+The project has a number of tasks and quite a lot of documentation to be track and managed. The agile project management methodology was adopted particulary the use of working in sprints. Usually this involves a scrum team, but this project is a indivudal assignment so the project mostly involved making a to-do list for iterations of the development cycle.
 
-```
+These to-do list were tracked using a Trello board divided into four sections the setup, documentation, In progress and Completed.
+
+![Trello](/Resources/trello.png)
