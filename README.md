@@ -1,17 +1,5 @@
 # PROJECT DOCUMENTATION
 
-## Table of Contents
-
-1. [R1](#id) Problem Identification
-2. [R2](#why) Why ?
-3. [R3](#choice) Choice of Database
-4. [R4](#ORM) ORM
-5. [R5](#End Points) End Points
-6. [R6](#ERD) ERD Diagram
-7. [R7](#extras) 3rd party packages
-8. [R8](#Associations) Associations
-9. [R9](#Relations) Relations 10.[R10](#PM) Project Management
-
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
 The modern PC is made up of many customisable parts. Building a PC requires planning. Often a person will need to compile a list of parts on a spreadsheet or paper then used that to research configuration compatibilities and find quotes. By creating an API application we can make this process easier by storing PC configurations and the list of part.
