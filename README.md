@@ -1,5 +1,7 @@
 # PROJECT DOCUMENTATION
 
+1. [R1 Identification of the problem you are trying to solve by building this particular app.] (#R1)
+
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
 The modern PC is made up of many customisable parts. Building a PC requires planning. Often a person will need to compile a list of parts on a spreadsheet or paper then used that to research configuration compatibilities and find quotes. By creating an API application we can make this process easier by storing PC configurations and the list of part.
@@ -47,6 +49,34 @@ Object Relational Mapping controls the interact between an application and the d
 ![ERD Diagram for APP](/Resources/PCBuild_ERD.png)
 
 ## R7 Detail any third party services that your app will use.\*\*
+
+This application used the Flask framework to create the PC Configuration API. Flask is a lightweight framework which leaves the majority of design and architecture desicions up to the developer. This means much of the additional functionality is added through Python packages. The Python package manager allows us to take a snap shot of the all dependencies which can be found in this file - ![Requirements.txt](/src/requirements.txt)
+
+The key packages that enable the API are :
+
+### SQLAlchemy
+
+As described earlier, SQLAlchemy provides the ORM functionality to the application. It connects to PostgreSQL server and manages all database transactions. It encapsulates most of the code required to query and work with the PostgreSQL database. It also allows us to create models of the relations we are using and make associations between them easily. The models allow us to work with model objects that the database returns based on the queries made.
+
+### Psycopg2
+
+This package is effectively and driver/adapter that SQLAlchemy uses to connect between the Flask application and PostgreSQL. It is needed because SQLALchemy is vendor agonostic when it comes to databases.
+
+### Flask-Marshmallow
+
+Flask marshmallow provides a schema to support the conversion of complex data types. In our application this is for create a JSON representation of the data pulled from the database. It also converta JSON from a web request to be used in the creation or maintaince of model objects in the datbase. Flask-Marshmallow also provides validation tools which can be implemented in its schemas.
+
+### Python-Dotenv
+
+This package allows us to setup and use environment variables in seperate files like .env and .flaskenv. Information we want outside the application for example like passwords and security can be stored in a seperate file and not upload to public repositories like GitHub. Also enironment variables like debugging mode and which port to run the application on can be added to .flaskenv
+
+### Flask-Bcrypt
+
+Flask-Bcrypt is a popular hashing algorithm choice for passwords. It is based on the Blowfish cipher and is made to be slow and delibrately computationally expensive. This is in order to slow down brute force attacks making it more difficult for attackers to guess or crack passwords.
+
+### Flask-JWT-Extended
+
+The Flask_JWT-Extended library is what is used to manage the use of JWT - JSON Web Tokens. During the authorization process a user is assigned a JWT token upon login, this token helps identify and signal to the web server that the JWT token for the user does or doesnt have permission to access certain resources. The token is self-contained, compact and secure and the web application uses a password to access the tokens it distributes. Tokens can also be set for a expiry period in which the user will need to login again if their token expires
 
 ## R8 Describe your projects models in terms of the relationships they have with each other.
 
@@ -260,8 +290,23 @@ The PC_Build_Parts table has a relationship with Parts and PC and includes forei
 
 ## R10 Describe the way tasks are allocated and tracked in your project.
 
-The project has a number of tasks and quite a lot of documentation to be track and managed. The agile project management methodology was adopted particulary the use of working in sprints. Usually this involves a scrum team, but this project is a indivudal assignment so the project mostly involved making a to-do list for iterations of the development cycle.
+This project was managing using the Agile methodology. Agile project management focuses on iteration and breaks large project up into smaller parts. As project has a number of tasks and quite a lot of documentation to be track and managed agile seems appropriate. Two techniques were used sprints, a kanban board and stand ups. Their was really only one user story which can be described as :
 
-These to-do list were tracked using a Trello board divided into four sections the setup, documentation, In progress and Completed.
+- A person wants to build a PC with parts that they have selected.
+
+This user story is what the whole app is built around.
+
+Stand ups were conducted online and provided a way to see what other people were achieving, struggling with and planning to do.
+
+Sprints usually involve a scrum team, but this project is a individual assignment so the project mostly involved making to-do lists for each sprint iteration of the development cycle. The sprint cycle consisted of :
+
+- setup and configuration
+- models
+- blueprints
+- validation
+
+The to-do lists for each cycle were tracked using a Trello Kanban board divided into four sections the setup, documentation, In progress and Completed.
+
+[Link to Trello Board] (https://trello.com/b/kipfk3xF/pc-build-configurator)
 
 ![Trello](/Resources/trello.png)
