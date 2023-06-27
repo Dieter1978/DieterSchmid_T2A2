@@ -5,6 +5,12 @@
 1. [R1](#id) Problem Identification
 2. [R2](#why) Why ?
 3. [R3](#choice) Choice of Database
+4. [R4](#ORM) ORM
+5. [R5](#End Points) End Points
+6. [R6](#ERD) ERD Diagram
+7. [R7](#extras) 3rd party packages
+8. [R8](#Associations) Associations
+9. [R9](#Relations) Relations 10.[R10](#PM) Project Management
 
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
@@ -47,6 +53,8 @@ Object Relational Mapping controls the interact between an application and the d
 - Because the ORM abstracts the database it is easy to change database systems should one desire.
 
 ## R5 Document all endpoints for your API.\*\*
+
+Please see included End_Points.md file for more information.
 
 ## R6 An ERD for your app.\*\*
 
