@@ -2,9 +2,9 @@
 
 ## Table of Contents
 
-1. [R1] Problem Identification
-2. [R2] Why ?
-3. [R3] Choice of Database
+1. [R1](#id) Problem Identification
+2. [R2](#why) Why ?
+3. [R3](#choice) Choice of Database
 
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
