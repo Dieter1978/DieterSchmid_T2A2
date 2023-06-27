@@ -1,6 +1,6 @@
 # PROJECT DOCUMENTATION
 
-1. [R1 Identification of the problem you are trying to solve by building this particular app.] (#R1)
+1. [**R1 Identification of the problem you are trying to solve by building this particular app.**] (#R1)
 
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
