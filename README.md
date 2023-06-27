@@ -1,6 +1,10 @@
 # PROJECT DOCUMENTATION
 
-1. [**R1 Identification of the problem you are trying to solve by building this particular app.**] (#R1)
+## Table of Contents
+
+1. [R1] Problem Identification
+2. [R2] Why ?
+3. [R3] Choice of Database
 
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
