@@ -1,12 +1,10 @@
 # PROJECT DOCUMENTATION
 
-1. [R10](#R10)
-
 ## R1 Identification of the problem you are trying to solve by building this particular app.
 
 The modern PC is made up of many customisable parts. Building a PC requires planning. Often a person will need to compile a list of parts on a spreadsheet or paper then used that to research configuration compatibilities and find quotes. By creating an API application we can make this process easier by storing PC configurations and the list of part.
 
-## R2 Why is it a problem that needs solving?\*\*
+## R2 Why is it a problem that needs solving?
 
 Their are number of reasons for doing this. But ultimately we trying to ease the burden on the consumer when shopping for PC parts. although the initial app MVP is just to store configurations as a catalogue of the users PC builds, it could certainly be built to allow :
 
@@ -15,7 +13,7 @@ Their are number of reasons for doing this. But ultimately we trying to ease the
 
 These two are items whilst not include in todays app are surely for food for thought in creating a seed for a PC building online business model driven by having PC config first rather then scouring the web for the parts one needs.
 
-## R3 Why have you chosen this database system. What are the drawbacks compared to others?\*\*
+## R3 Why have you chosen this database system. What are the drawbacks compared to others?
 
 PostSQL was chooses for three reasons.
 
@@ -32,7 +30,7 @@ Their a range of other benefits such as its wide OS compatibility support for al
 4. Finally companies need to work if they have the in-house expertise or if they need it. If not then they are reliant on third party partners or consultants to support the in-house skills. Sometimes a companies
    will hire new expertise in just for helping support PostgreSQL.
 
-## R4 Identify and discuss the key functionalities and benefits of an ORM.\*\*
+## R4 Identify and discuss the key functionalities and benefits of an ORM.
 
 Object Relational Mapping controls the interact between an application and the database it connects to. By using ORM we do not need to use direct SQL statement to work with data in the database. Instead we can use the programming language the application is being developed in. We can use things like Object Oriented Classes and models as integrated data structures instead of SQL tables. The major benefits of this are :
 
@@ -42,11 +40,11 @@ Object Relational Mapping controls the interact between an application and the d
 - ORMs also provide some shielding agaisnt things like SQL injections making the code base more secure.
 - Because the ORM abstracts the database it is easy to change database systems should one desire.
 
-## R5 Document all endpoints for your API.\*\*
+## R5 Document all endpoints for your API.
 
 Please see included End_Points.md file for more information.
 
-## R6 An ERD for your app.\*\*
+## R6 An ERD for your app.
 
 ![ERD Diagram for APP](/Resources/PCBuild_ERD.png)
 
