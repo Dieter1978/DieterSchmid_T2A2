@@ -12,9 +12,9 @@ def create_app():
     app = Flask(__name__)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
-    #"postgresql+psycopg2://db_dev:crazyshadow@localhost:5432/pc_build_db"
+   
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_KEY')
-    #"backwardsforwards"
+   
     
     db.init_app(app)
     ma.init_app(app)
