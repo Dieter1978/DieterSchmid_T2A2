@@ -1,5 +1,5 @@
 from flask import Flask
-from os import environ
+import os
 from init import db, ma, bcrypt, jwt
 from blueprints.cli_bp import cli_bp
 from blueprints.auth_bp import auth_bp
@@ -11,9 +11,11 @@ from marshmallow.exceptions import ValidationError
 def create_app():
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg2://db_dev:crazyshadow@localhost:5432/pc_build_db"
-    app.config['JWT_SECRET_KEY'] = "backwardsforwards"
-
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI')
+    #"postgresql+psycopg2://db_dev:crazyshadow@localhost:5432/pc_build_db"
+    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_KEY')
+    #"backwardsforwards"
+    
     db.init_app(app)
     ma.init_app(app)
     bcrypt.init_app(app)
