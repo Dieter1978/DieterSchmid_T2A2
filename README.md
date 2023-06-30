@@ -2,7 +2,7 @@
 
 [**DieterSchmid_T2A2 - Github Repository Link**](https://github.com/Dieter1978/DieterSchmid_T2A2)
 
-## Installtion
+## Installation
 
 - In psql create the database :
 
@@ -14,6 +14,26 @@ create database pc_build_db
 
 ```
 python3 - venv venv
+```
+
+```
+source venv/bin/activate
+```
+
+```
+Python3 -m pip install -r requirements.txt
+```
+
+```
+flask db create
+```
+
+```
+flask db seed
+```
+
+```
+flask run
 ```
 
 ## R1 Identification of the problem you are trying to solve by building this particular app.
